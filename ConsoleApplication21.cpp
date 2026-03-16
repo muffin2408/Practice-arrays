@@ -1,106 +1,79 @@
-﻿//Задача 1
+////Задача 1
 //#include <iostream>
 //#include <ctime>
 //#include <cstdlib>
 //using namespace std;
-//
-//void bubbleSort(int arr[], int start, int end)
-//{
-//    for (int a = start + 1; a < end; a++)
-//    {
-//        for (int b = end - 1; b >= a; b--)
-//        {
-//            if (arr[b - 1] > arr[b])
-//            {
-//                int temp = arr[b - 1];
-//                arr[b - 1] = arr[b];
-//                arr[b] = temp;
-//            }
-//        }
-//    }
-//}
-//
-//void printArray(int arr[], int n, const char* msg)
-//{
-//    cout << msg;
-//    for (int i = 0; i < n; i++)
-//    {
-//        cout << arr[i] << " ";
-//    }
-//    cout << endl;
-//}
-//
-//void fillRandom(int arr[], int n, int min, int max)
-//{
-//    for (int i = 0; i < n; i++)
-//    {
-//        arr[i] = min + rand() % (max - min + 1);
-//    }
-//}
 //
 //int main()
 //{
 //    setlocale(LC_ALL, "");
 //    srand(time(0));
 //
-//    try {
-//        int N, K;
-//        cout << "Введите размер массива N: ";
-//        cin >> N;
+//    int N, K;
+//    cout << "Введите размер массива N: ";
+//    cin >> N;
 //
-//        int* arr = new int[N];
+//    int* arr = new int[N];
 //
-//        fillRandom(arr, N, 10, 99);
-//        printArray(arr, N, "Исходный массив: ");
+//    for (int i = 0; i < N; i++)
+//    {
+//        arr[i] = 10 + rand() % (99 - 10 + 1);
+//    }
 //
-//        cout << "Введите количество блоков K (K <= N): ";
-//        cin >> K;
+//    cout << "Исходный массив: ";
+//    for (int i = 0; i < N; i++)
+//    {
+//        cout << arr[i] << " ";
+//    }
+//    cout << endl;
 //
-//        int blockSize = N / K;
-//        int remainder = N % K;
+//    cout << "Введите количество блоков K (K <= N): ";
+//    cin >> K;
 //
-//        cout << "\nРазмер блока: " << blockSize;
-//        if (remainder > 0) {
-//            cout << " (первые " << remainder << " блоков больше на 1 элемент)";
+//    int blockSize = N / K;
+//    int remainder = N % K;
+//
+//    int start = 0;
+//    for (int i = 0; i < K; i++) {
+//        int end = start + blockSize;
+//        if (i < remainder) {
+//            end++;
+//        }
+//
+//        cout << "Блок " << i + 1 << ": ";
+//        for (int j = start; j < end; j++) {
+//            cout << arr[j] << " ";
+//        }
+//        cout << " -> ";
+//
+//        for (int a = start + 1; a < end; a++)
+//        {
+//            for (int b = end - 1; b >= a; b--)
+//            {
+//                if (arr[b - 1] > arr[b])
+//                {
+//                    int temp = arr[b - 1];
+//                    arr[b - 1] = arr[b];
+//                    arr[b] = temp;
+//                }
+//            }
+//        }
+//
+//        for (int j = start; j < end; j++) {
+//            cout << arr[j] << " ";
 //        }
 //        cout << endl;
 //
-//        int start = 0;
-//        for (int i = 0; i < K; i++) {
-//            int end = start + blockSize;
-//            if (i < remainder) {
-//                end++;
-//            }
-//
-//            cout << "Блок " << i + 1 << ": ";
-//            for (int j = start; j < end; j++) {
-//                cout << arr[j] << " ";
-//            }
-//            cout << " -> ";
-//
-//            bubbleSort(arr, start, end);
-//
-//            for (int j = start; j < end; j++) {
-//                cout << arr[j] << " ";
-//            }
-//            cout << endl;
-//
-//            start = end;
-//        }
-//
-//        cout << "\nРезультат:\n";
-//        printArray(arr, N, "Отсортированный массив: ");
-//
-//        delete[] arr;
+//        start = end;
 //    }
-//    catch (const string& e) {
-//        cerr << e << endl;
-//        return 1;
+//
+//    cout << "\nРезультат:\n";
+//    cout << "Отсортированный массив: ";
+//    for (int i = 0; i < N; i++)
+//    {
+//        cout << arr[i] << " ";
 //    }
-//    catch (const bad_alloc& e) {
-//        cerr << "Ошибка выделения памяти" << endl;
-//        return 1;
-//    }
+//    cout << endl;
 //    return 0;
 //}
 
@@ -108,151 +81,127 @@
 #include <iostream>
 #include <cstring> 
 #include <clocale>  
+#include <cctype>
 #include <cstdlib>
 using namespace std;
 
-void toLower(char dest[], const char src[]) {
-    int len = strlen(src);
-    for (int i = 0; i <= len; i++) {
-        dest[i] = tolower(src[i]);
+int main() {
+    setlocale(LC_ALL, "Russian");
+    system("chcp 1251 > nul");
+
+    const int max_txt = 1000;
+    const int max_bad = 10;
+    const int max_wlen = 20;
+
+    char txt[max_txt];
+    char bad[max_bad][max_wlen];
+    int badCnt;
+
+    cout << "Введите текст (максимум " << max_txt - 1 << " символов):" << endl;
+    cin.getline(txt, max_txt);
+
+    if (strlen(txt) == 0) {
+        cout << "Ошибка: текст не может быть пустым" << endl;
+        return 1;
     }
-}
 
-bool isDelim(char ch) {
-    return ch == ' ' || ch == ',' || ch == '.' || ch == '!' || ch == '?' ||
-        ch == ';' || ch == ':' || ch == '-' || ch == '"' || ch == '\'' ||
-        ch == '(' || ch == ')' || ch == '\n' || ch == '\t' || ch == '\0';
-}
+    cout << "Введите количество запрещенных слов: ";
+    cin >> badCnt;
+    cin.ignore();
 
-int findWord(const char txt[], int pos, const char wrd[], int& wLen) {
-    int txtLen = strlen(txt);
-    int wrdLen = strlen(wrd);
-
-    for (int i = pos; i <= txtLen - wrdLen; i++) {
-        bool found = true;
-
-        if (i > 0 && !isDelim(txt[i - 1])) {
-            continue;
-        }
-
-        for (int j = 0; j < wrdLen; j++) {
-            char c1 = tolower(txt[i + j]);
-            char c2 = tolower(wrd[j]);
-
-            if (c1 != c2) {
-                found = false;
-                break;
-            }
-        }
-
-        if (found) {
-            char next = txt[i + wrdLen];
-            if (isDelim(next) || next == '\0') {
-                wLen = wrdLen;
-                return i;
-            }
-        }
+    if (cin.fail() || badCnt <= 0 || badCnt > max_bad) {
+        cout << "Ошибка: некорректное количество запрещенных слов" << endl;
+        return 1;
     }
-    return -1;
-}
 
-void replaceWord(char txt[], int pos, int len) {
-    for (int i = 0; i < len; i++) {
-        txt[pos + i] = '*';
-    }
-}
-
-void filterText(char txt[], char bad[][20], int badCnt) {
-    int txtLen = strlen(txt);
-    char badLow[10][20];
-
+    cout << "Введите " << badCnt << " запрещенных слов:" << endl;
     for (int i = 0; i < badCnt; i++) {
-        toLower(badLow[i], bad[i]);
+        cout << i + 1 << ": ";
+        cin.getline(bad[i], max_wlen);
+
+        if (strlen(bad[i]) == 0) {
+            cout << "Ошибка: запрещенное слово не может быть пустым" << endl;
+            return 1;
+        }
     }
 
+    cout << "\nИсходный текст: " << txt << endl;
+    cout << "Запрещенные слова: ";
+    for (int i = 0; i < badCnt; i++) {
+        cout << bad[i];
+        if (i < badCnt - 1) cout << ", ";
+    }
+    cout << endl;
+
+    char badLow[max_bad][max_wlen];
+    for (int i = 0; i < badCnt; i++) {
+        int len = strlen(bad[i]);
+        for (int j = 0; j <= len; j++) {
+            badLow[i][j] = tolower(bad[i][j]);
+        }
+    }
+
+    int txtLen = strlen(txt);
     int curPos = 0;
+
     while (curPos < txtLen) {
         int minPos = txtLen;
         int curLen = 0;
         int curIdx = -1;
 
         for (int i = 0; i < badCnt; i++) {
-            int wLen = 0;
-            int fndPos = findWord(txt, curPos, badLow[i], wLen);
+            int wrdLen = strlen(badLow[i]);
 
-            if (fndPos != -1 && fndPos < minPos) {
-                minPos = fndPos;
-                curLen = wLen;
-                curIdx = i;
+            for (int j = curPos; j <= txtLen - wrdLen; j++) {
+                if (j > 0) {
+                    char prev = txt[j - 1];
+                    bool isPrevDelim = (prev == ' ' || prev == ',' || prev == '.' || prev == '!' ||
+                        prev == '?' || prev == ';' || prev == ':' || prev == '-' ||
+                        prev == '"' || prev == '\'' || prev == '(' || prev == ')' ||
+                        prev == '\n' || prev == '\t');
+                    if (!isPrevDelim) {
+                        continue;
+                    }
+                }
+                bool found = true;
+                for (int k = 0; k < wrdLen; k++) {
+                    char c1 = tolower(txt[j + k]);
+                    char c2 = badLow[i][k];
+
+                    if (c1 != c2) {
+                        found = false;
+                        break;
+                    }
+                }
+
+                if (found) {
+                    char next = txt[j + wrdLen];
+                    bool isNextDelim = (next == ' ' || next == ',' || next == '.' || next == '!' ||
+                        next == '?' || next == ';' || next == ':' || next == '-' ||
+                        next == '"' || next == '\'' || next == '(' || next == ')' ||
+                        next == '\n' || next == '\t' || next == '\0');
+
+                    if (isNextDelim && j < minPos) {
+                        minPos = j;
+                        curLen = wrdLen;
+                        curIdx = i;
+                    }
+                }
             }
         }
 
         if (curIdx != -1) {
-            replaceWord(txt, minPos, curLen);
+            for (int i = 0; i < curLen; i++) {
+                txt[minPos + i] = '*';
+            }
             curPos = minPos + curLen;
         }
         else {
             break;
         }
     }
-}
 
-int main() {
-    setlocale(LC_ALL, "Russian");
-    system("chcp 1251 > nul");
+    cout << "Отфильтрованный текст: " << txt << endl;
 
-    try {
-        const int MAX_TXT = 1000;
-        const int MAX_BAD = 10;
-        const int MAX_WLEN = 20;
-
-        char txt[MAX_TXT];
-        char bad[MAX_BAD][MAX_WLEN];
-        int badCnt;
-
-        cout << "Введите текст (максимум " << MAX_TXT - 1 << " символов):" << endl;
-        cin.getline(txt, MAX_TXT);
-
-        if (strlen(txt) == 0) {
-            throw "Текст не может быть пустым";
-        }
-
-        cout << "Введите количество запрещенных слов: ";
-        cin >> badCnt;
-        cin.ignore();
-
-        if (cin.fail() || badCnt <= 0 || badCnt > MAX_BAD) {
-            throw "Некорректное количество запрещенных слов";
-        }
-
-        cout << "Введите " << badCnt << " запрещенных слов:" << endl;
-        for (int i = 0; i < badCnt; i++) {
-            cout << i + 1 << ": ";
-            cin.getline(bad[i], MAX_WLEN);
-
-            if (strlen(bad[i]) == 0) {
-                throw "Запрещенное слово не может быть пустым";
-            }
-        }
-
-        cout << "\nИсходный текст: " << txt << endl;
-        cout << "Запрещенные слова: ";
-        for (int i = 0; i < badCnt; i++) {
-            cout << bad[i];
-            if (i < badCnt - 1) cout << ", ";
-        }
-        cout << endl;
-
-        filterText(txt, bad, badCnt);
-        cout << "Отфильтрованный текст: " << txt << endl;
-    }
-    catch (const char* err) {
-        cerr << "Ошибка: " << err << endl;
-        return 1;
-    }
-    catch (...) {
-        cerr << "Неизвестная ошибка!" << endl;
-        return 1;
-    }
     return 0;
 }
