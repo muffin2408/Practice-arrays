@@ -109,11 +109,6 @@ int main() {
     cin >> badCnt;
     cin.ignore();
 
-    if (cin.fail() || badCnt <= 0 || badCnt > max_bad) {
-        cout << "Ошибка: некорректное количество запрещенных слов" << endl;
-        return 1;
-    }
-
     cout << "Введите " << badCnt << " запрещенных слов:" << endl;
     for (int i = 0; i < badCnt; i++) {
         cout << i + 1 << ": ";
